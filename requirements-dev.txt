@@ -1,0 +1,7 @@
+# Development-only tools (NOT needed to run the website)
+-r requirements.txt
+
+reportlab==5.0.1   # builds docs/make_report.py -> the project report PDF
+
+# Optional: enables the AI answer mode in chatbot.py
+# anthropic

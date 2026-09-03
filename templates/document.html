@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}{{ document.title }}{% endblock %}
+{% block description %}{{ document.purpose }}{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div class="wrap">
+        <div class="crumbs">
+            <a href="{{ url_for('home') }}">Home</a> &rsaquo;
+            <a href="{{ url_for('documents') }}">Documents</a> &rsaquo;
+            <a href="{{ url_for('category_page', category_id=category.id) }}">{{ category.name }}</a>
+        </div>
+        <h1>{{ document.title }}</h1>
+        <p>{{ document.purpose }}</p>
+    </div>
+</div>
+
+<div class="wrap">
+    <div class="layout">
+
+        <article class="paper">
+
+            <div class="notice info">
+                <strong>When to use this:</strong> {{ document.when_to_use }}
+            </div>
+
+            <h2>Keep this ready before you start</h2>
+            <ul>
+                {% for item in document.checklist %}
+                <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+
+            <h2>Stamp duty, registration and signing</h2>
+            <div class="notice warn">{{ document.stamp }}</div>
+
+            <h2>The template</h2>
+            <p class="small muted">
+                Everything highlighted in yellow is a blank you must replace with
+                your own details. Delete any clause that does not apply to you.
+            </p>
+
+            <div class="doc-toolbar">
+                <span class="label">{{ document.title }}</span>
+                <button class="btn small gold" id="copyBtn" type="button">Copy text</button>
+                <button class="btn small ghost" style="color:#d5deee;border-color:#4a5f88;" id="printBtn" type="button">Print</button>
+                <a class="btn small ghost" style="color:#d5deee;border-color:#4a5f88;"
+                   href="{{ url_for('document_download', document_id=document.id) }}">Download .txt</a>
+            </div>
+            <pre class="template" id="templateBody">{{ document.body }}</pre>
+
+            <div class="notice danger" style="margin-top:26px;">
+                <strong>This is a learning sample, not legal advice.</strong>
+                A document that is wrongly drafted, insufficiently stamped or not
+                registered where the law requires registration may be
+                unenforceable. Please have a qualified advocate review it before
+                you sign.
+            </div>
+        </article>
+
+        <aside class="side">
+            <div class="side-box dark">
+                <h4>Not sure this is the right document?</h4>
+                <p>Describe your situation and the assistant will point you to the correct one.</p>
+                <a class="btn gold small" href="{{ url_for('chat_page') }}">🎙️ Ask LegalMitra</a>
+            </div>
+
+            <div class="side-box">
+                <h4>Quick actions</h4>
+                <ul>
+                    <li>📋 <a href="#" onclick="document.getElementById('copyBtn').click();return false;">Copy the full text</a></li>
+                    <li>🖨️ <a href="#" onclick="window.print();return false;">Print this template</a></li>
+                    <li>⬇️ <a href="{{ url_for('document_download', document_id=document.id) }}">Download as .txt</a></li>
+                </ul>
+            </div>
+
+            {% if related %}
+            <div class="side-box">
+                <h4>Related templates</h4>
+                <ul>
+                    {% for item in related %}
+                    <li>📄 <a href="{{ url_for('document_page', document_id=item.id) }}">{{ item.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <div class="side-box">
+                <h4>Learn the law behind it</h4>
+                <ul>
+                    <li><a href="{{ url_for('category_page', category_id=category.id) }}">{{ category.name }} &rarr;</a></li>
+                    <li><a href="{{ url_for('glossary') }}">A-Z legal glossary &rarr;</a></li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+</div>
+{% endblock %}

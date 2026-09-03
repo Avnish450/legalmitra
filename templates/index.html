@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<!-- ===================== HERO ===================== -->
+<div class="hero">
+    <div class="wrap center">
+        <h1>Every law, <em>explained simply</em>.</h1>
+        <p class="lead">
+            From your fundamental rights to company incorporation, from a rent
+            agreement to an international treaty &mdash; find the law you need,
+            in plain English, and ask our talking assistant anything.
+        </p>
+
+        <form class="hero-search" action="{{ url_for('search') }}" method="get">
+            <input type="text" name="q"
+                   placeholder="e.g. my landlord is not returning my deposit"
+                   aria-label="Search the law">
+            <button type="submit">Find the law</button>
+        </form>
+
+        <div class="btn-row" style="justify-content:center;">
+            <a class="btn gold" href="{{ url_for('chat_page') }}">🎙️ Talk to LegalMitra</a>
+            <a class="btn ghost" style="color:#fff;border-color:#4a5f88;" href="{{ url_for('categories') }}">Browse all areas of law</a>
+        </div>
+
+        <div class="hero-stats">
+            <div><b>{{ kb_stats.categories }}</b><span>Areas of law</span></div>
+            <div><b>{{ kb_stats.topics }}</b><span>Legal topics</span></div>
+            <div><b>{{ kb_stats.documents }}</b><span>Ready templates</span></div>
+            <div><b>{{ kb_stats.faqs }}</b><span>Answered FAQs</span></div>
+            <div><b>{{ kb_stats.glossary }}</b><span>Glossary terms</span></div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== HOW IT WORKS ===================== -->
+<section class="block alt">
+    <div class="wrap">
+        <div class="section-head center">
+            <h2>Three ways to get an answer</h2>
+            <p>Whether you know the legal word or not, there is a way in.</p>
+        </div>
+
+        <div class="grid grid-3">
+            <div class="card">
+                <div class="card-icon">🗣️</div>
+                <h3>Ask in your own words</h3>
+                <p>
+                    Type or <strong>speak</strong> your problem the way you would
+                    tell a friend. The assistant finds the right law, explains it,
+                    and reads the answer aloud.
+                </p>
+                <div class="card-meta">
+                    <span class="pill green">Voice enabled</span>
+                    <a href="{{ url_for('chat_page') }}">Open chatbot &rarr;</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">📚</div>
+                <h3>Browse by area of law</h3>
+                <p>
+                    {{ kb_stats.categories }} branches, from criminal and property
+                    to cyber, infrastructure, tax and international law &mdash;
+                    each with key points, procedure and the Acts that apply.
+                </p>
+                <div class="card-meta">
+                    <span class="pill">{{ kb_stats.topics }} topics</span>
+                    <a href="{{ url_for('categories') }}">Browse &rarr;</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">📄</div>
+                <h3>Download a document</h3>
+                <p>
+                    Rent agreements, legal notices, affidavits, wills, NDAs and
+                    more &mdash; fill-in-the-blank drafts you can copy, print or
+                    download as a text file.
+                </p>
+                <div class="card-meta">
+                    <span class="pill gold">{{ kb_stats.documents }} templates</span>
+                    <a href="{{ url_for('documents') }}">See all &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== EMERGENCY ===================== -->
+<section class="block">
+    <div class="wrap">
+        <div class="section-head">
+            <h2>Need help right now?</h2>
+            <p>
+                Action-first cards for situations where you have minutes, not days.
+                Every card tells you what to do, what <em>not</em> to do, and which
+                number to call.
+            </p>
+        </div>
+
+        <div class="grid grid-3">
+            {% for card in emergency %}
+            <a class="card" href="{{ url_for('emergency_card', card_id=card.id) }}">
+                <div class="card-icon">{{ card.icon }}</div>
+                <h3>{{ card.title }}</h3>
+                <p>{{ card.immediate[0] }}</p>
+                <div class="card-meta">
+                    <span class="pill red">Urgent</span>
+                    <span>{{ card.immediate|length }} steps</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+
+        <div class="btn-row" style="margin-top:22px;">
+            <a class="btn" href="{{ url_for('emergency') }}">All quick-help cards</a>
+            <a class="btn ghost" href="{{ url_for('helplines_page') }}">National helpline numbers</a>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== AREAS OF LAW ===================== -->
+<section class="block alt">
+    <div class="wrap">
+        <div class="section-head">
+            <h2>Every branch of law, A to Z</h2>
+            <p>
+                Pick the area your problem belongs to. Not sure which one?
+                <a href="{{ url_for('chat_page') }}">Just describe it to the chatbot</a>.
+            </p>
+        </div>
+
+        <div class="grid grid-4">
+            {% for category in all_categories %}
+            <a class="card" href="{{ url_for('category_page', category_id=category.id) }}">
+                <div class="card-icon">{{ category.icon }}</div>
+                <h3>{{ category.name }}</h3>
+                <p>{{ category.tagline }}</p>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ===================== FEATURED TOPICS ===================== -->
+<section class="block">
+    <div class="wrap">
+        <div class="section-head">
+            <h2>Most read topics</h2>
+            <p>The questions people actually come here with.</p>
+        </div>
+
+        <div class="grid grid-3">
+            {% for topic in featured %}
+            <a class="card" href="{{ url_for('topic_page', topic_id=topic.id) }}">
+                <h3>{{ topic.title }}</h3>
+                <p>{{ topic.summary[:165] }}&hellip;</p>
+                <div class="card-meta">
+                    <span class="pill">{{ topic.key_points|length }} key points</span>
+                    <span>{{ topic.faqs|length }} FAQs</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ===================== POPULAR DOCUMENTS ===================== -->
+<section class="block alt">
+    <div class="wrap">
+        <div class="section-head">
+            <h2>Most downloaded templates</h2>
+            <p>Every blank is marked in [SQUARE BRACKETS] so you know exactly what to replace.</p>
+        </div>
+
+        <div class="grid grid-3">
+            {% for document in popular_docs %}
+            <a class="card" href="{{ url_for('document_page', document_id=document.id) }}">
+                <div class="card-icon">📄</div>
+                <h3>{{ document.title }}</h3>
+                <p>{{ document.purpose }}</p>
+                <div class="card-meta">
+                    <span class="pill gold">Template</span>
+                    <span>{{ document.checklist|length }}-point checklist</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ===================== CTA ===================== -->
+<section class="block">
+    <div class="wrap">
+        <div class="card" style="background:var(--navy);border-color:var(--navy);text-align:center;padding:44px 26px;">
+            <h2 style="color:#fff;">Still not sure where your problem fits?</h2>
+            <p style="color:#cdd8ea;max-width:620px;margin:10px auto 22px;">
+                Describe it in one sentence &mdash; by typing or by speaking &mdash;
+                and LegalMitra will find the right area of law, explain your options
+                and point you to the document you need.
+            </p>
+            <div class="btn-row" style="justify-content:center;">
+                <a class="btn gold" href="{{ url_for('chat_page') }}">🎙️ Start a conversation</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

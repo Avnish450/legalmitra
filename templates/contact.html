@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Contact{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div class="wrap">
+        <div class="crumbs"><a href="{{ url_for('home') }}">Home</a> &rsaquo; Contact</div>
+        <h1>Contact &amp; Feedback</h1>
+        <p>
+            Found a mistake, want a topic added, or have a suggestion? Tell us.
+            Messages are stored in the project database.
+        </p>
+    </div>
+</div>
+
+<section class="block">
+    <div class="wrap">
+        <div class="grid grid-2">
+
+            <div class="card">
+                {% if sent %}
+                <div class="notice info">
+                    <strong>Thank you.</strong> Your message has been recorded.
+                    Since this is an academic project there is no support team,
+                    but every message is read while improving the site.
+                </div>
+                <a class="btn ghost small" href="{{ url_for('contact') }}">Send another message</a>
+                {% else %}
+
+                {% if error %}
+                <div class="notice danger">{{ error }}</div>
+                {% endif %}
+
+                <h3 style="margin-bottom:16px;">Send us a message</h3>
+                <form method="post" action="{{ url_for('contact') }}">
+                    <div class="field">
+                        <label for="name">Your name *</label>
+                        <input type="text" id="name" name="name" required
+                               value="{{ request.form.get('name', '') }}">
+                    </div>
+                    <div class="field">
+                        <label for="email">Email address *</label>
+                        <input type="email" id="email" name="email" required
+                               value="{{ request.form.get('email', '') }}">
+                    </div>
+                    <div class="field">
+                        <label for="subject">Subject</label>
+                        <select id="subject" name="subject">
+                            <option>General feedback</option>
+                            <option>Report an error in the content</option>
+                            <option>Request a new topic</option>
+                            <option>Request a new document template</option>
+                            <option>Technical problem with the site</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="message">Your message *</label>
+                        <textarea id="message" name="message" required
+                                  placeholder="Tell us what should be added, corrected or improved..."></textarea>
+                    </div>
+                    <button class="btn gold" type="submit">Send message</button>
+                </form>
+                {% endif %}
+            </div>
+
+            <div>
+                <div class="card" style="margin-bottom:20px;">
+                    <div class="card-icon">⚠️</div>
+                    <h3>We cannot give legal advice</h3>
+                    <p>
+                        This is a student project, not a law firm. We cannot review
+                        your documents, represent you, or tell you what to do in
+                        your specific case. For that you need a qualified advocate.
+                    </p>
+                </div>
+
+                <div class="card" style="margin-bottom:20px;">
+                    <div class="card-icon">🆓</div>
+                    <h3>If you cannot afford a lawyer</h3>
+                    <p>
+                        Free legal aid is a statutory right. Contact the District
+                        or State Legal Services Authority, or call the NALSA
+                        helpline <b>15100</b>. Every district court has a Legal
+                        Services Authority office.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🚨</div>
+                    <h3>If it is urgent</h3>
+                    <p>
+                        Do not wait for a reply here. Use the emergency quick-help
+                        cards, or call the relevant helpline directly.
+                    </p>
+                    <div class="btn-row" style="margin-top:12px;">
+                        <a class="btn small" href="{{ url_for('emergency') }}">Emergency help</a>
+                        <a class="btn small ghost" href="{{ url_for('helplines_page') }}">All helplines</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock %}

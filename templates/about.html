@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% block title %}About the Project{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div class="wrap">
+        <div class="crumbs"><a href="{{ url_for('home') }}">Home</a> &rsaquo; About</div>
+        <h1>About this Project</h1>
+        <p>
+            LegalMitra is a second-year engineering mini project: a legal
+            information portal with a voice-enabled AI chatbot, built from
+            scratch in Python and plain HTML, CSS and JavaScript.
+        </p>
+    </div>
+</div>
+
+<div class="wrap">
+    <div class="layout">
+        <article class="paper">
+
+            <h2>The idea</h2>
+            <p>
+                Most people meet the law only when something has already gone
+                wrong &mdash; a cheque bounces, a landlord refuses a deposit, a
+                salary is not paid, a builder delays a flat. At that moment they
+                face two problems at once. First, they do not know which branch
+                of law their problem belongs to. Second, everything written about
+                it is written for lawyers.
+            </p>
+            <p>
+                We wanted to build the thing we wished existed: one place where a
+                person can describe a problem in ordinary words &mdash; or simply
+                speak it &mdash; and get back a plain-English explanation, the
+                practical steps to take, the Act that applies, and the document
+                they will need.
+            </p>
+
+            <h2>What it contains</h2>
+            <ul>
+                <li><strong>{{ kb_stats.categories }} areas of law</strong>, from constitutional and criminal to infrastructure, environment, medical and international law.</li>
+                <li><strong>{{ kb_stats.topics }} legal topics</strong>, each with a summary, key points, a step-by-step procedure, the statutes that apply and FAQs.</li>
+                <li><strong>{{ kb_stats.documents }} document templates</strong> with every blank marked, plus notes on stamp duty and registration.</li>
+                <li><strong>{{ kb_stats.glossary }} glossary terms</strong> explaining the legal words used everywhere else.</li>
+                <li><strong>{{ kb_stats.faqs }} answered FAQs</strong> and ten emergency quick-help cards.</li>
+                <li>A <strong>talking chatbot</strong> that listens, searches, answers and speaks.</li>
+            </ul>
+
+            <h2>How it was built</h2>
+            <p>
+                The whole system is deliberately simple. There is no TypeScript,
+                no React, no build step and no external framework. Everything is
+                either plain Python or plain browser code, so every line can be
+                explained during a viva.
+            </p>
+
+            <table class="data" style="margin-bottom:22px;">
+                <tr><th>Layer</th><th>Technology</th><th>Why we chose it</th></tr>
+                <tr><td>Backend</td><td>Python 3 + Flask</td><td>Smallest possible web framework; one function per page</td></tr>
+                <tr><td>Templates</td><td>Jinja2</td><td>Ships with Flask; keeps HTML and Python separate</td></tr>
+                <tr><td>Frontend</td><td>HTML5, CSS3, vanilla JavaScript</td><td>No build tools, no dependencies, fully readable</td></tr>
+                <tr><td>Database</td><td>SQLite 3</td><td>Built into Python; the whole database is one file</td></tr>
+                <tr><td>Search / NLP</td><td>TF-IDF + cosine similarity, written by hand</td><td>Explainable maths instead of a black-box library</td></tr>
+                <tr><td>Voice</td><td>Web Speech API</td><td>Speech recognition and synthesis are already in the browser</td></tr>
+                <tr><td>Optional AI</td><td>Claude API (Anthropic)</td><td>Rewrites retrieved knowledge into a natural reply (RAG)</td></tr>
+                <tr><td>Report</td><td>ReportLab</td><td>Generates the project PDF directly from Python</td></tr>
+            </table>
+
+            <h2>How the chatbot actually works</h2>
+            <p>
+                There is no magic and no pre-trained model in the offline engine.
+                The steps are:
+            </p>
+            <ol class="steps">
+                <li><strong>Clean</strong> &mdash; the question is lower-cased, punctuation is stripped, and it is split into words.</li>
+                <li><strong>Stem</strong> &mdash; word endings are removed so &ldquo;filing&rdquo;, &ldquo;filed&rdquo; and &ldquo;file&rdquo; all match.</li>
+                <li><strong>Expand</strong> &mdash; everyday words are mapped to legal ones, so &ldquo;my boss fired me&rdquo; also searches for &ldquo;termination&rdquo;.</li>
+                <li><strong>Weigh</strong> &mdash; every word gets a TF-IDF score, so rare words like &ldquo;gratuity&rdquo; count far more than common ones like &ldquo;law&rdquo;.</li>
+                <li><strong>Match</strong> &mdash; cosine similarity compares the question vector against all {{ kb_stats.topics + kb_stats.documents }} indexed entries and picks the closest.</li>
+                <li><strong>Compose</strong> &mdash; the winning entry is turned into a structured answer: direct explanation, key points, steps, and the law.</li>
+            </ol>
+            <p>
+                An intent layer sits on top, so greetings, thanks, emergencies and
+                requests for a document format are handled differently from an
+                ordinary legal question.
+            </p>
+
+            <h2>Optional AI mode</h2>
+            <p>
+                If an API key is configured, the retrieved knowledge-base entries
+                are passed to a Claude model which writes the final reply in its
+                own words &mdash; a technique called Retrieval Augmented
+                Generation. The model is instructed to use <em>only</em> the
+                supplied material, so it cannot invent a section number or a
+                deadline.
+            </p>
+            <div class="notice info">
+                <strong>AI mode is currently
+                {% if ai_on %}ON{% else %}OFF{% endif %}.</strong>
+                {% if ai_on %}
+                    Answers are being written by the language model from the
+                    retrieved knowledge base.
+                {% else %}
+                    The site is running entirely on the offline engine, with no
+                    internet connection and no API key required. Every feature
+                    still works.
+                {% endif %}
+            </div>
+
+            <h2>Honest limitations</h2>
+            <ul>
+                <li>The knowledge base is hand-written and simplified for learning; it is not a substitute for the bare Acts.</li>
+                <li>Statutes are amended frequently, and several provisions differ from State to State &mdash; especially stamp duty and tenancy rules.</li>
+                <li>The offline engine matches on words, so an unusual phrasing can still miss the right topic.</li>
+                <li>Voice input needs a Chromium-based browser and a microphone permission.</li>
+                <li>This is an academic project. It is not a law firm and it gives no legal advice.</li>
+            </ul>
+
+            <h2>What we would build next</h2>
+            <ul>
+                <li>Regional language support in both the text and the voice layers.</li>
+                <li>Semantic embeddings so the search understands meaning, not only words.</li>
+                <li>A lawyer directory and appointment booking.</li>
+                <li>Automatic filling of the templates from a guided question flow.</li>
+                <li>Live updates from official sources when an Act is amended.</li>
+            </ul>
+        </article>
+
+        <aside class="side">
+            <div class="side-box dark">
+                <h4>Try it</h4>
+                <p>The chatbot is the heart of the project. Ask it anything, by voice or text.</p>
+                <a class="btn gold small" href="{{ url_for('chat_page') }}">🎙️ Open the chatbot</a>
+            </div>
+
+            <div class="side-box">
+                <h4>Project at a glance</h4>
+                <ul>
+                    <li>Areas of law: <b>{{ kb_stats.categories }}</b></li>
+                    <li>Legal topics: <b>{{ kb_stats.topics }}</b></li>
+                    <li>Templates: <b>{{ kb_stats.documents }}</b></li>
+                    <li>Glossary terms: <b>{{ kb_stats.glossary }}</b></li>
+                    <li>FAQs: <b>{{ kb_stats.faqs }}</b></li>
+                    <li>Language: <b>Python 3</b></li>
+                    <li>Framework: <b>Flask</b></li>
+                    <li>Database: <b>SQLite</b></li>
+                </ul>
+            </div>
+
+            <div class="side-box">
+                <h4>See the numbers</h4>
+                <ul>
+                    <li><a href="{{ url_for('stats_page') }}">Live usage analytics &rarr;</a></li>
+                    <li><a href="{{ url_for('categories') }}">Full coverage map &rarr;</a></li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+</div>
+{% endblock %}

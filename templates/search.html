@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}{% if query %}Search: {{ query }}{% else %}Search{% endif %}{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div class="wrap">
+        <div class="crumbs"><a href="{{ url_for('home') }}">Home</a> &rsaquo; Search</div>
+        <h1>{% if query %}Results for &ldquo;{{ query }}&rdquo;{% else %}Search the law{% endif %}</h1>
+        <p>
+            {% if query %}
+                {{ results|length }} matching page{{ 's' if results|length != 1 }} found,
+                ranked by the same TF-IDF relevance score the chatbot uses.
+            {% else %}
+                Type anything &mdash; a legal word, or just your problem in plain English.
+            {% endif %}
+        </p>
+    </div>
+</div>
+
+<section class="block">
+    <div class="wrap">
+
+        <form action="{{ url_for('search') }}" method="get" class="hero-search"
+              style="max-width:100%;margin-bottom:30px;">
+            <input type="text" name="q" value="{{ query }}"
+                   placeholder="e.g. builder delayed possession"
+                   style="border:1px solid var(--line);">
+            <button type="submit">Search</button>
+        </form>
+
+        {% if glossary_hits %}
+        <div class="card" style="margin-bottom:26px;">
+            <h3>Glossary matches</h3>
+            {% for term in glossary_hits %}
+            <div class="term" style="margin-top:10px;">
+                <b>{{ term.term }}</b>
+                <p>{{ term.meaning }}</p>
+            </div>
+            {% endfor %}
+            <div class="card-meta">
+                <a href="{{ url_for('glossary') }}">See the full A-Z glossary &rarr;</a>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if query and not results %}
+        <div class="card center" style="padding:40px;">
+            <div class="card-icon">🔍</div>
+            <h3>Nothing matched that</h3>
+            <p style="margin:10px auto 20px;max-width:520px;">
+                Try a different word, or describe the problem instead of naming
+                the law &mdash; for example &ldquo;my employer has not paid my
+                salary&rdquo; instead of &ldquo;section 15 wages&rdquo;.
+            </p>
+            <div class="btn-row" style="justify-content:center;">
+                <a class="btn gold" href="{{ url_for('chat_page') }}">Ask the chatbot instead</a>
+                <a class="btn ghost" href="{{ url_for('categories') }}">Browse all areas of law</a>
+            </div>
+        </div>
+        {% endif %}
+
+        {% for result in results %}
+        <div class="result">
+            <h3><a href="{{ result.url }}">{{ result.title }}</a></h3>
+            <p>{{ result.snippet[:230] }}{% if result.snippet|length > 230 %}&hellip;{% endif %}</p>
+            <div class="meta">
+                <span class="pill {{ 'gold' if result.kind == 'document' else '' }}">
+                    {{ 'Template' if result.kind == 'document' else 'Topic' }}
+                </span>
+                <span class="muted">{{ result.category }}</span>
+                <span class="muted">relevance</span>
+                <span class="bar"><i style="width: {{ (result.score * 100)|round|int if result.score < 1 else 100 }}%;"></i></span>
+                <span class="muted">{{ result.score }}</span>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</section>
+{% endblock %}

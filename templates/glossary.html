@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Legal Glossary{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div class="wrap">
+        <div class="crumbs"><a href="{{ url_for('home') }}">Home</a> &rsaquo; Glossary</div>
+        <h1>A-Z Legal Glossary</h1>
+        <p>
+            {{ kb_stats.glossary }} legal words, each explained in one sentence.
+            Courts and contracts use these terms constantly, so knowing them makes
+            everything else on this site easier to read.
+        </p>
+    </div>
+</div>
+
+<section class="block">
+    <div class="wrap">
+
+        <div class="az-bar">
+            <a href="{{ url_for('glossary') }}" class="{{ 'active' if not selected }}">All</a>
+            {% for letter in letters %}
+            <a href="{{ url_for('glossary', letter=letter) }}"
+               class="{{ 'active' if selected == letter }}">{{ letter }}</a>
+            {% endfor %}
+        </div>
+
+        <div class="card" style="margin-bottom:24px;">
+            <div class="field" style="margin-bottom:8px;">
+                <label for="filterBox">Find a word</label>
+                <input type="text" id="filterBox" placeholder="Start typing, e.g. bail, decree, tort...">
+            </div>
+            <div class="small muted" id="filterCount">{{ terms|length }} terms shown</div>
+        </div>
+
+        {% for item in terms %}
+        <div class="term" data-filter="{{ item.term }} {{ item.meaning }}">
+            <b>{{ item.term }}</b>
+            <p>{{ item.meaning }}</p>
+        </div>
+        {% endfor %}
+
+        {% if not terms %}
+        <div class="card center" style="padding:34px;">
+            <p>No terms start with that letter.</p>
+            <a class="btn small ghost" style="margin-top:12px;" href="{{ url_for('glossary') }}">Show all terms</a>
+        </div>
+        {% endif %}
+
+    </div>
+</section>
+{% endblock %}

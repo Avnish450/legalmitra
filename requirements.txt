@@ -1,0 +1,11 @@
+# LegalMitra - runtime dependency
+# This is the only package the website itself needs.
+# Vercel installs from this file when deploying.
+
+Flask==3.1.3
+
+# NOTE: sqlite3 is NOT listed here because it is part of the Python standard
+# library. Nothing else is required - no scikit-learn, no NLTK, no Node.js.
+#
+# To build the project report PDF as well, install the extra tool:
+#     pip install -r requirements-dev.txt

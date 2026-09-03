@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Emergency Help{% endblock %}
+
+{% block content %}
+<div class="page-head" style="background:var(--red);">
+    <div class="wrap">
+        <div class="crumbs"><a href="{{ url_for('home') }}">Home</a> &rsaquo; Emergency Help</div>
+        <h1>🚨 Emergency Quick Help</h1>
+        <p>
+            For situations where you have minutes, not days. Each card tells you
+            exactly what to do first, what <strong>not</strong> to do, and which
+            number to call.
+        </p>
+    </div>
+</div>
+
+<section class="block">
+    <div class="wrap">
+
+        <div class="notice danger">
+            <strong>If life or safety is in immediate danger, call 112 first.</strong>
+            Legal steps come after you are safe.
+        </div>
+
+        <div class="grid grid-2">
+            {% for card in cards %}
+            <div class="sos">
+                <h3>
+                    <span style="font-size:1.5rem;">{{ card.icon }}</span>
+                    <a href="{{ url_for('emergency_card', card_id=card.id) }}">{{ card.title }}</a>
+                </h3>
+
+                <h4 class="small" style="font-family:var(--font-body);text-transform:uppercase;letter-spacing:.08em;color:var(--green);margin-bottom:8px;">Do this now</h4>
+                <ul class="do-list">
+                    {% for step in card.immediate[:4] %}
+                    <li>{{ step }}</li>
+                    {% endfor %}
+                </ul>
+
+                <div class="card-meta">
+                    <span class="pill red">{{ card.helpline.split('|')[0].strip() }}</span>
+                    <a href="{{ url_for('emergency_card', card_id=card.id) }}">Full steps &rarr;</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="section-head" style="margin-top:44px;">
+            <h2>National helpline numbers</h2>
+            <p>Free, 24x7, and available across India.</p>
+        </div>
+
+        <div class="grid grid-4">
+            {% for line in helplines %}
+            <div class="helpline-card">
+                <b>{{ line.number }}</b>
+                <span>{{ line.name }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

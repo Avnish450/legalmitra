@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Document Templates{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div class="wrap">
+        <div class="crumbs"><a href="{{ url_for('home') }}">Home</a> &rsaquo; Documents</div>
+        <h1>Legal Document Templates</h1>
+        <p>
+            {{ kb_stats.documents }} ready-to-use drafts. Every blank is written
+            as [SQUARE BRACKETS] so you can see exactly what to replace. Copy it,
+            print it, or download it as a text file.
+        </p>
+    </div>
+</div>
+
+<section class="block">
+    <div class="wrap">
+
+        <div class="card" style="margin-bottom:26px;">
+            <div class="field" style="margin-bottom:10px;">
+                <label for="filterBox">Filter templates</label>
+                <input type="text" id="filterBox"
+                       placeholder="Type a word, e.g. rent, notice, affidavit, employment...">
+            </div>
+            <div class="small muted" id="filterCount">{{ documents|length }} templates shown</div>
+        </div>
+
+        <div class="btn-row" style="margin-bottom:24px;">
+            <a class="btn small {{ 'gold' if not selected else 'ghost' }}"
+               href="{{ url_for('documents') }}">All areas</a>
+            {% for category in used_categories %}
+            <a class="btn small {{ 'gold' if selected == category.id else 'ghost' }}"
+               href="{{ url_for('documents', category=category.id) }}">
+                {{ category.icon }} {{ category.name.split(' ')[0] }}
+            </a>
+            {% endfor %}
+        </div>
+
+        <div class="grid grid-3">
+            {% for document in documents %}
+            <a class="card" href="{{ url_for('document_page', document_id=document.id) }}"
+               data-filter="{{ document.title }} {{ document.purpose }} {{ document.keywords|join(' ') }}">
+                <div class="card-icon">📄</div>
+                <h3>{{ document.title }}</h3>
+                <p>{{ document.purpose }}</p>
+                <div class="card-meta">
+                    <span class="pill gold">{{ document.checklist|length }}-point checklist</span>
+                    <span>Open &rarr;</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+
+        <div class="notice warn" style="margin-top:32px;">
+            <strong>Before you use any template:</strong> stamp duty and
+            registration requirements are fixed by each State and change from
+            time to time. A draft that is correct in one State may be
+            insufficiently stamped in another. Always have an advocate review
+            the final document before signing.
+        </div>
+    </div>
+</section>
+{% endblock %}

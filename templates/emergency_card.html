@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}{{ card.title }}{% endblock %}
+
+{% block content %}
+<div class="page-head" style="background:var(--red);">
+    <div class="wrap">
+        <div class="crumbs">
+            <a href="{{ url_for('home') }}">Home</a> &rsaquo;
+            <a href="{{ url_for('emergency') }}">Emergency Help</a>
+        </div>
+        <h1>{{ card.icon }} {{ card.title }}</h1>
+        <p>{{ card.helpline }}</p>
+    </div>
+</div>
+
+<div class="wrap">
+    <div class="layout">
+        <article class="paper" id="readable">
+
+            <div class="notice danger">
+                <strong>If you are in immediate physical danger, call 112 now.</strong>
+                Do the legal steps below once you are safe.
+            </div>
+
+            <div class="btn-row" style="margin-bottom:24px;">
+                <button class="btn small ghost" id="listenBtn">🔊 Listen to these steps</button>
+            </div>
+
+            <h2>Do this now</h2>
+            <ol class="steps">
+                {% for step in card.immediate %}
+                <li>{{ step }}</li>
+                {% endfor %}
+            </ol>
+
+            <h2>Do NOT do this</h2>
+            <ul class="dont-list">
+                {% for item in card.do_not %}
+                <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+
+            <h2>Who to call</h2>
+            <div class="notice info">
+                <strong>{{ card.helpline }}</strong>
+            </div>
+
+            {% if topic %}
+            <h2>Understand the law behind this</h2>
+            <p>
+                Once the immediate situation is handled, read the full topic so
+                you know what happens next and what your rights are.
+            </p>
+            <div class="btn-row">
+                <a class="btn" href="{{ url_for('topic_page', topic_id=topic.id) }}">
+                    {{ topic.title }} &rarr;
+                </a>
+            </div>
+            {% endif %}
+        </article>
+
+        <aside class="side">
+            <div class="side-box dark">
+                <h4>Need to ask something specific?</h4>
+                <p>Describe what is happening and get an immediate answer, by voice or text.</p>
+                <a class="btn gold small" href="{{ url_for('chat_page') }}">🎙️ Ask LegalMitra</a>
+            </div>
+
+            <div class="side-box">
+                <h4>All helplines</h4>
+                <ul>
+                    {% for line in helplines %}
+                    <li>{{ line.name }} &mdash; <b>{{ line.number }}</b></li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="side-box">
+                <h4>Other quick-help cards</h4>
+                <ul>
+                    <li><a href="{{ url_for('emergency') }}">See all emergency cards &rarr;</a></li>
+                    <li><a href="{{ url_for('helplines_page') }}">National helpline directory &rarr;</a></li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+</div>
+{% endblock %}

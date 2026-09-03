@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Areas of Law{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div class="wrap">
+        <div class="crumbs"><a href="{{ url_for('home') }}">Home</a> &rsaquo; Areas of Law</div>
+        <h1>All {{ all_categories|length }} Areas of Law</h1>
+        <p>
+            Law is not one subject but many. Each branch below has its own
+            statutes, its own forum and its own procedure. Pick the one your
+            problem belongs to, or use the chatbot if you are not sure.
+        </p>
+    </div>
+</div>
+
+<section class="block">
+    <div class="wrap">
+        <div class="grid grid-2">
+            {% for row in rows %}
+            <div class="card">
+                <div class="card-icon">{{ row.category.icon }}</div>
+                <h3><a href="{{ url_for('category_page', category_id=row.category.id) }}">{{ row.category.name }}</a></h3>
+                <p>{{ row.category.description }}</p>
+
+                <div style="margin-top:14px;">
+                    <h4 class="small" style="text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);font-family:var(--font-body);margin-bottom:8px;">
+                        Topics covered
+                    </h4>
+                    <ul style="font-size:.88rem;">
+                        {% for topic in row.topics %}
+                        <li><a href="{{ url_for('topic_page', topic_id=topic.id) }}">{{ topic.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="card-meta">
+                    <span class="pill">{{ row.topics|length }} topics</span>
+                    {% if row.documents %}
+                    <span class="pill gold">{{ row.documents|length }} template{{ 's' if row.documents|length > 1 }}</span>
+                    {% endif %}
+                    <a href="{{ url_for('category_page', category_id=row.category.id) }}">Open &rarr;</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

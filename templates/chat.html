@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block title %}Ask the Chatbot{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div class="wrap">
+        <div class="crumbs"><a href="{{ url_for('home') }}">Home</a> &rsaquo; Chatbot</div>
+        <h1>🎙️ Talk to LegalMitra</h1>
+        <p>
+            Ask any legal question in your own words &mdash; type it, or press the
+            microphone and speak. The assistant searches
+            {{ kb_stats.topics }} legal topics and {{ kb_stats.documents }}
+            document templates, explains the answer, and reads it aloud.
+        </p>
+    </div>
+</div>
+
+<div class="wrap">
+
+    <div class="chat-shell">
+
+        <div class="chat-head">
+            <div class="chat-avatar">⚖️</div>
+            <div>
+                <b>LegalMitra Assistant</b>
+                <span class="status">
+                    <i></i>
+                    {% if ai_on %}
+                        Online &mdash; AI mode active
+                    {% else %}
+                        Online &mdash; offline knowledge engine
+                    {% endif %}
+                </span>
+            </div>
+            <div class="chat-head-actions">
+                <button class="icon-btn" id="speakBtn" title="Voice replies are ON" type="button">🔊</button>
+                <button class="icon-btn" id="stopBtn" title="Stop speaking" type="button">⏹</button>
+                <button class="icon-btn" id="clearBtn" title="Start a new conversation" type="button">🗑</button>
+            </div>
+        </div>
+
+        <div class="chat-body" id="chatBody"></div>
+
+        <div class="chat-foot">
+            <div class="chat-input-row">
+                <button class="mic-btn" id="micBtn" title="Speak your question" type="button">🎤</button>
+                <textarea id="chatInput" rows="1"
+                          placeholder="Type your legal question..."
+                          aria-label="Your question"></textarea>
+                <button class="send-btn" id="sendBtn" title="Send" type="button">➤</button>
+            </div>
+
+            <div class="voice-note" id="voiceNote">
+                <span>🎤 Click the mic and speak &mdash; Enter sends, Shift+Enter makes a new line.</span>
+                <span>
+                    Voice:
+                    <select id="voiceSelect" aria-label="Choose a voice"></select>
+                </span>
+                <span>
+                    Speed:
+                    <select id="rateSelect" aria-label="Speaking speed">
+                        <option value="0.8">Slow</option>
+                        <option value="1" selected>Normal</option>
+                        <option value="1.25">Fast</option>
+                    </select>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <section class="block" style="padding-top:14px;">
+        <div class="section-head">
+            <h2>Try one of these</h2>
+            <p>Click a question to ask it straight away.</p>
+        </div>
+        <div class="btn-row">
+            {% for starter in starters %}
+            <button class="chip" type="button"
+                    onclick="askLegalMitra({{ starter|tojson }})">{{ starter }}</button>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="block" style="padding-top:6px;">
+        <div class="grid grid-3">
+            <div class="card">
+                <div class="card-icon">🧠</div>
+                <h3>How the answer is found</h3>
+                <p>
+                    Your question is cleaned, stemmed and turned into a TF-IDF
+                    vector, then compared by cosine similarity against every topic
+                    and template in the knowledge base. The closest match is
+                    explained back to you.
+                </p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🔊</div>
+                <h3>How the voice works</h3>
+                <p>
+                    Speech recognition and speech synthesis both run inside your
+                    browser using the Web Speech API. Nothing is sent to a paid
+                    speech service, and it works best in Chrome or Edge.
+                </p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🔐</div>
+                <h3>What is stored</h3>
+                <p>
+                    Only the question and the answer, so we can show usage
+                    analytics and give the bot a short memory of the
+                    conversation. No name, no login, no personal data.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="notice warn" style="margin-bottom:36px;">
+        <strong>Important:</strong> LegalMitra gives general legal information for
+        learning. It cannot replace an advocate, it does not know the facts of
+        your case, and it must not be relied on for any decision with legal
+        consequences.
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+{% endblock %}

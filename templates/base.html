@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ site_name }}{% endblock %} | {{ site_name }}</title>
+    <meta name="description" content="{% block description %}LegalMitra explains every branch of law in simple language, gives ready-to-use legal document templates, and answers your questions through a talking AI chatbot.{% endblock %}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖️</text></svg>">
+</head>
+<body>
+
+<!-- Permanent disclaimer strip: this is an academic project -->
+<div class="strip">
+    <strong>Academic project.</strong>
+    Information here is for learning only and is <strong>not legal advice</strong>.
+    Always consult a qualified advocate for your own matter.
+</div>
+
+<header>
+    <div class="wrap header-inner">
+        <a class="logo" href="{{ url_for('home') }}">
+            <span class="logo-mark">⚖️</span>
+            <span class="logo-text">
+                <b>{{ site_name }}</b>
+                <span>{{ tagline }}</span>
+            </span>
+        </a>
+
+        <div class="header-search">
+            <form action="{{ url_for('search') }}" method="get">
+                <input type="text" name="q" placeholder="Search any law, right or document..."
+                       value="{{ request.args.get('q', '') }}" aria-label="Search">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        <button class="nav-toggle" id="navToggle" aria-label="Menu">&#9776;</button>
+    </div>
+
+    <nav class="main">
+        <div class="wrap">
+            <ul id="navMenu">
+                <li><a href="{{ url_for('home') }}" class="{{ 'active' if request.endpoint == 'home' }}">Home</a></li>
+                <li><a href="{{ url_for('categories') }}" class="{{ 'active' if request.endpoint in ['categories','category_page','topic_page'] }}">Areas of Law</a></li>
+                <li><a href="{{ url_for('documents') }}" class="{{ 'active' if request.endpoint in ['documents','document_page'] }}">Documents</a></li>
+                <li><a href="{{ url_for('chat_page') }}" class="{{ 'active' if request.endpoint == 'chat_page' }}">Ask the Chatbot</a></li>
+                <li><a href="{{ url_for('glossary') }}" class="{{ 'active' if request.endpoint == 'glossary' }}">Glossary</a></li>
+                <li><a href="{{ url_for('emergency') }}" class="urgent {{ 'active' if request.endpoint in ['emergency','emergency_card'] }}">Emergency Help</a></li>
+                <li><a href="{{ url_for('about') }}" class="{{ 'active' if request.endpoint == 'about' }}">About</a></li>
+                <li><a href="{{ url_for('contact') }}" class="{{ 'active' if request.endpoint == 'contact' }}">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<footer>
+    <div class="wrap">
+        <div class="footer-grid">
+            <div>
+                <h4>{{ site_name }}</h4>
+                <p style="margin-bottom:12px;">
+                    A student-built legal information portal covering
+                    {{ kb_stats.categories }} branches of law, with
+                    {{ kb_stats.topics }} explained topics,
+                    {{ kb_stats.documents }} document templates and a talking
+                    AI assistant.
+                </p>
+                <p class="small">
+                    Built with Python, Flask, SQLite, HTML, CSS and JavaScript
+                    as a second-year engineering mini project.
+                </p>
+            </div>
+
+            <div>
+                <h4>Explore</h4>
+                <ul>
+                    <li><a href="{{ url_for('categories') }}">All areas of law</a></li>
+                    <li><a href="{{ url_for('documents') }}">Document templates</a></li>
+                    <li><a href="{{ url_for('chat_page') }}">Ask the chatbot</a></li>
+                    <li><a href="{{ url_for('glossary') }}">A-Z glossary</a></li>
+                    <li><a href="{{ url_for('emergency') }}">Emergency help</a></li>
+                    <li><a href="{{ url_for('stats_page') }}">Usage analytics</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4>Popular</h4>
+                <ul>
+                    <li><a href="{{ url_for('topic_page', topic_id='fundamental-rights') }}">Fundamental Rights</a></li>
+                    <li><a href="{{ url_for('topic_page', topic_id='fir-filing') }}">How to file an FIR</a></li>
+                    <li><a href="{{ url_for('topic_page', topic_id='rent-and-tenancy') }}">Landlord &amp; tenant</a></li>
+                    <li><a href="{{ url_for('topic_page', topic_id='consumer-complaint') }}">Consumer complaint</a></li>
+                    <li><a href="{{ url_for('topic_page', topic_id='cheque-bounce') }}">Cheque bounce</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4>Emergency Numbers</h4>
+                <div class="foot-help">
+                    {% for line in helplines[:6] %}
+                    <span>{{ line.name }} <b>{{ line.number }}</b></span>
+                    {% endfor %}
+                </div>
+                <a class="btn small gold" style="margin-top:12px;" href="{{ url_for('helplines_page') }}">All helplines</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>&copy; 2026 {{ site_name }} &mdash; academic project. Content simplified for learning.</span>
+            <span>Not a law firm. Not legal advice.</span>
+        </div>
+    </div>
+</footer>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

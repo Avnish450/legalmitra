@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}{{ category.name }}{% endblock %}
+{% block description %}{{ category.description }}{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div class="wrap">
+        <div class="crumbs">
+            <a href="{{ url_for('home') }}">Home</a> &rsaquo;
+            <a href="{{ url_for('categories') }}">Areas of Law</a> &rsaquo;
+            {{ category.name }}
+        </div>
+        <h1>{{ category.icon }} {{ category.name }}</h1>
+        <p>{{ category.description }}</p>
+    </div>
+</div>
+
+<section class="block">
+    <div class="wrap">
+        <div class="section-head">
+            <h2>Topics in this area</h2>
+            <p>{{ topics|length }} topic{{ 's' if topics|length != 1 }} explained in plain language.</p>
+        </div>
+
+        <div class="grid grid-3">
+            {% for topic in topics %}
+            <a class="card" href="{{ url_for('topic_page', topic_id=topic.id) }}">
+                <h3>{{ topic.title }}</h3>
+                <p>{{ topic.summary[:170] }}&hellip;</p>
+                <div class="card-meta">
+                    <span class="pill">{{ topic.key_points|length }} key points</span>
+                    <span>{{ topic.laws|length }} laws cited</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+
+        {% if documents %}
+        <div class="section-head" style="margin-top:44px;">
+            <h2>Document templates for this area</h2>
+            <p>Ready-to-use drafts you can copy, print or download.</p>
+        </div>
+
+        <div class="grid grid-3">
+            {% for document in documents %}
+            <a class="card" href="{{ url_for('document_page', document_id=document.id) }}">
+                <div class="card-icon">📄</div>
+                <h3>{{ document.title }}</h3>
+                <p>{{ document.purpose }}</p>
+                <div class="card-meta">
+                    <span class="pill gold">Template</span>
+                    <span>Download &rarr;</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="card" style="margin-top:40px;background:var(--navy);border-color:var(--navy);text-align:center;">
+            <h3 style="color:#fff;">Have a specific question about {{ category.name|lower }}?</h3>
+            <p style="color:#cdd8ea;margin:8px 0 16px;">
+                Ask the chatbot in your own words &mdash; you can type it or speak it.
+            </p>
+            <div class="btn-row" style="justify-content:center;">
+                <a class="btn gold" href="{{ url_for('chat_page') }}">Ask LegalMitra</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

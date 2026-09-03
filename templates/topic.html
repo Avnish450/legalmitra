@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% block title %}{{ topic.title }}{% endblock %}
+{% block description %}{{ topic.summary[:180] }}{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div class="wrap">
+        <div class="crumbs">
+            <a href="{{ url_for('home') }}">Home</a> &rsaquo;
+            <a href="{{ url_for('categories') }}">Areas of Law</a> &rsaquo;
+            <a href="{{ url_for('category_page', category_id=category.id) }}">{{ category.name }}</a>
+        </div>
+        <h1>{{ topic.title }}</h1>
+        <p>{{ category.icon }} {{ category.name }}</p>
+    </div>
+</div>
+
+<div class="wrap">
+    <div class="layout">
+
+        <!-- ============ MAIN ARTICLE ============ -->
+        <article class="paper" id="readable">
+
+            <div class="summary-box">
+                {{ topic.summary }}
+            </div>
+
+            <div class="btn-row" style="margin-bottom:26px;">
+                <button class="btn small ghost" id="listenBtn">🔊 Listen to this page</button>
+                <a class="btn small ghost" href="{{ url_for('chat_page') }}">💬 Ask a follow-up question</a>
+            </div>
+
+            {% if topic.key_points %}
+            <h2>Key points to remember</h2>
+            <ul>
+                {% for point in topic.key_points %}
+                <li>{{ point }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            {% if topic.steps %}
+            <h2>What you should actually do</h2>
+            <ol class="steps">
+                {% for step in topic.steps %}
+                <li>{{ step }}</li>
+                {% endfor %}
+            </ol>
+            {% endif %}
+
+            {% if topic.laws %}
+            <h2>The law that applies</h2>
+            <ul class="law-list">
+                {% for law in topic.laws %}
+                <li>{{ law }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            {% if topic.faqs %}
+            <h2>Frequently asked questions</h2>
+            {% for faq in topic.faqs %}
+            <details class="faq">
+                <summary>{{ faq.q }}</summary>
+                <div class="faq-body">{{ faq.a }}</div>
+            </details>
+            {% endfor %}
+            {% endif %}
+
+            <div class="notice warn" style="margin-top:30px;">
+                <strong>Remember:</strong> this page explains the general position
+                for learning purposes. Statutes are amended, states differ, and the
+                outcome of a real case depends on its own facts. Please consult a
+                qualified advocate before acting.
+            </div>
+        </article>
+
+        <!-- ============ SIDEBAR ============ -->
+        <aside class="side">
+
+            <div class="side-box dark">
+                <h4>Ask about this</h4>
+                <p>
+                    Not sure how this applies to your situation? Describe it to
+                    the assistant &mdash; type it or speak it.
+                </p>
+                <a class="btn gold small" href="{{ url_for('chat_page') }}">🎙️ Open the chatbot</a>
+            </div>
+
+            {% if related %}
+            <div class="side-box">
+                <h4>Related topics</h4>
+                <ul>
+                    {% for item in related %}
+                    <li><a href="{{ url_for('topic_page', topic_id=item.id) }}">{{ item.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            {% if related_docs %}
+            <div class="side-box">
+                <h4>Documents you may need</h4>
+                <ul>
+                    {% for doc in related_docs %}
+                    <li>📄 <a href="{{ url_for('document_page', document_id=doc.id) }}">{{ doc.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <div class="side-box">
+                <h4>Search words for this topic</h4>
+                <div>
+                    {% for keyword in topic.keywords[:8] %}
+                    <a class="pill" style="margin:0 4px 6px 0;"
+                       href="{{ url_for('search', q=keyword) }}">{{ keyword }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="side-box">
+                <h4>Emergency numbers</h4>
+                <ul>
+                    {% for line in helplines[:5] %}
+                    <li>{{ line.name }} &mdash; <b>{{ line.number }}</b></li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        </aside>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Helpline Numbers{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div class="wrap">
+        <div class="crumbs"><a href="{{ url_for('home') }}">Home</a> &rsaquo; Helplines</div>
+        <h1>National Helpline Numbers</h1>
+        <p>Free, toll-free and available across India. Save these in your phone before you need them.</p>
+    </div>
+</div>
+
+<section class="block">
+    <div class="wrap">
+        <div class="grid grid-3">
+            {% for line in helplines %}
+            <div class="helpline-card">
+                <b>{{ line.number }}</b>
+                <span>{{ line.name }}</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="section-head" style="margin-top:44px;">
+            <h2>Useful government portals</h2>
+            <p>Official websites where complaints are actually filed.</p>
+        </div>
+
+        <table class="data">
+            <tr><th>Purpose</th><th>Portal</th></tr>
+            <tr><td>Cybercrime and online financial fraud</td><td>cybercrime.gov.in</td></tr>
+            <tr><td>Consumer complaints</td><td>edaakhil.nic.in and consumerhelpline.gov.in</td></tr>
+            <tr><td>Right to Information (central government)</td><td>rtionline.gov.in</td></tr>
+            <tr><td>Company filings and incorporation</td><td>mca.gov.in</td></tr>
+            <tr><td>Income tax returns and notices</td><td>incometax.gov.in</td></tr>
+            <tr><td>GST registration and returns</td><td>gst.gov.in</td></tr>
+            <tr><td>Trademarks, patents and designs</td><td>ipindia.gov.in</td></tr>
+            <tr><td>Vehicle registration and challans</td><td>parivahan.gov.in</td></tr>
+            <tr><td>Provident fund</td><td>epfindia.gov.in</td></tr>
+            <tr><td>MSME / Udyam registration</td><td>udyamregistration.gov.in</td></tr>
+            <tr><td>Free legal aid</td><td>nalsa.gov.in</td></tr>
+            <tr><td>Case status in courts</td><td>ecourts.gov.in</td></tr>
+        </table>
+
+        <div class="notice info" style="margin-top:26px;">
+            Always type a government portal address yourself rather than clicking
+            a link sent to you. Fake copies of these websites are a common fraud.
+        </div>
+    </div>
+</section>
+{% endblock %}

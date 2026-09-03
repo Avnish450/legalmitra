@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Not Found{% endblock %}
+
+{% block content %}
+<section class="block">
+    <div class="wrap">
+        <div class="card center" style="padding:60px 30px;max-width:640px;margin:0 auto;">
+            <div class="card-icon" style="font-size:3rem;">⚖️</div>
+            <h1>That {{ thing }} could not be found</h1>
+            <p style="margin:14px 0 24px;">
+                The address may be mistyped, or the page may have been renamed.
+                Try searching instead, or ask the chatbot in your own words.
+            </p>
+            <div class="btn-row" style="justify-content:center;">
+                <a class="btn gold" href="{{ url_for('chat_page') }}">Ask the chatbot</a>
+                <a class="btn" href="{{ url_for('categories') }}">Browse areas of law</a>
+                <a class="btn ghost" href="{{ url_for('home') }}">Go home</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
