@@ -315,7 +315,7 @@ def cover():
         ["Search engine", "TF-IDF + cosine similarity, written by hand (~80 lines)"],
         ["Accuracy", "93.3% Top-1, 100% Top-3 on a 30-question test set"],
         ["Total code", "About 12,000 lines across 39 files"],
-        ["Submitted by", "[YOUR NAME] - [USN]"],
+        ["Submitted by", "Poorvi Rai - [USN]"],
         ["Guide", "[GUIDE NAME]"],
     ]
     table([["", ""]] + rows, [CW * 0.26, CW * 0.74], head=False, fs=9)

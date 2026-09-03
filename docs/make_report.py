@@ -321,6 +321,9 @@ def decorate(canvas, doc):
 #  LIVE PROJECT DATA
 # ===========================================================================
 
+STUDENT_NAME = "Poorvi Rai"
+NAME = STUDENT_NAME
+
 KB = legal_data.stats()
 INDEXED = len(chatbot.ENGINE.entries)
 ACCURACY = evaluator.run.__doc__ and None  # placeholder; real run happens below
@@ -473,10 +476,7 @@ def build_cover():
 
     submitted = [
         ["SUBMITTED BY", ""],
-        ["[STUDENT NAME 1]", "[USN / ROLL NUMBER]"],
-        ["[STUDENT NAME 2]", "[USN / ROLL NUMBER]"],
-        ["[STUDENT NAME 3]", "[USN / ROLL NUMBER]"],
-        ["[STUDENT NAME 4]", "[USN / ROLL NUMBER]"],
+        ["%s" % NAME, "[USN / ROLL NUMBER]"],
     ]
     element = Table(submitted, colWidths=[CONTENT_W * 0.55, CONTENT_W * 0.45])
     element.setStyle(TableStyle([
@@ -511,10 +511,9 @@ def build_certificate():
     gap(16)
     p("This is to certify that the project work entitled <b>&ldquo;LegalMitra - A "
       "Legal Information Portal with a Voice-Enabled AI Chatbot&rdquo;</b> is a "
-      "bonafide record of the work carried out by <b>[STUDENT NAME 1]</b>, "
-      "<b>[STUDENT NAME 2]</b>, <b>[STUDENT NAME 3]</b> and <b>[STUDENT NAME 4]</b>, "
-      "bearing university seat numbers [USN 1], [USN 2], [USN 3] and [USN 4] "
-      "respectively, in partial fulfilment of the requirements for the award of the "
+      "bonafide record of the work carried out by <b>" + NAME + "</b>, "
+      "bearing university seat number [USN], "
+      "in partial fulfilment of the requirements for the award of the "
       "degree of Bachelor of Engineering in [Branch] of [University Name], during "
       "the academic year 2025 - 2026.")
     p("It is certified that all the corrections and suggestions indicated during the "
@@ -557,18 +556,18 @@ def build_declaration():
         "dec", parent=S_TITLE, fontSize=20, alignment=TA_CENTER)))
     story.append(hr(GOLD, 1.4))
     gap(14)
-    p("We hereby declare that the project entitled <b>&ldquo;LegalMitra - A Legal "
+    p("I hereby declare that the project entitled <b>&ldquo;LegalMitra - A Legal "
       "Information Portal with a Voice-Enabled AI Chatbot&rdquo;</b> submitted to "
       "[University Name] in partial fulfilment of the requirements for the award of "
       "the degree of Bachelor of Engineering is a record of original work carried "
-      "out by us under the guidance of [Guide Name], [Designation], Department of "
+      "out by me under the guidance of [Guide Name], [Designation], Department of "
       "[Department], [College Name].")
-    p("We further declare that:")
+    p("I further declare that:")
     bullets([
         "The entire source code of the application - the Flask backend, the search "
         "and answer engine, the HTML templates, the stylesheet and the JavaScript - "
-        "was written by us.",
-        "The legal knowledge base was compiled and written by us from publicly "
+        "was written by me.",
+        "The legal knowledge base was compiled and written by me from publicly "
         "available statutes, government portals and standard reference material, "
         "and then simplified into plain English.",
         "The work has not been submitted, either in part or in full, to any other "
@@ -576,16 +575,13 @@ def build_declaration():
         "Wherever material has been taken from other sources, it has been duly "
         "acknowledged in the References section.",
     ])
-    p("We also acknowledge that this project is an academic exercise. The legal "
+    p("I also acknowledge that this project is an academic exercise. The legal "
       "content presented in the application is simplified for the purpose of "
       "learning and does not constitute legal advice.")
     gap(40)
 
     signatures = [
-        ["[STUDENT NAME 1]", "[USN]", "_______________"],
-        ["[STUDENT NAME 2]", "[USN]", "_______________"],
-        ["[STUDENT NAME 3]", "[USN]", "_______________"],
-        ["[STUDENT NAME 4]", "[USN]", "_______________"],
+        [NAME, "[USN]", "_______________"],
     ]
     table([["Name", "USN", "Signature"]] + signatures,
           [CONTENT_W * 0.42, CONTENT_W * 0.28, CONTENT_W * 0.30], font_size=10)
@@ -601,26 +597,26 @@ def build_acknowledgement():
     gap(14)
     p("The satisfaction that accompanies the successful completion of any task "
       "would be incomplete without mentioning the people who made it possible.")
-    p("We express our sincere gratitude to <b>[Principal Name]</b>, Principal, "
+    p("I express my sincere gratitude to <b>[Principal Name]</b>, Principal, "
       "[College Name], for providing the environment and the facilities that made "
       "this work possible.")
-    p("We are deeply thankful to <b>[HOD Name]</b>, Head of the Department of "
-      "[Department], for the constant encouragement and for permitting us to take "
+    p("I am deeply thankful to <b>[HOD Name]</b>, Head of the Department of "
+      "[Department], for the constant encouragement and for permitting me to take "
       "up a project outside the usual set of topics.")
-    p("We owe our deepest gratitude to our guide, <b>[Guide Name]</b>, "
+    p("I owe my deepest gratitude to my guide, <b>[Guide Name]</b>, "
       "[Designation], whose patient reviews shaped this project. The suggestion to "
       "measure the accuracy of our search engine rather than merely claim it, and "
       "the insistence that every algorithm be explainable without a library, "
       "changed the direction of the work for the better.")
-    p("We thank the faculty members of the department for their reviews during the "
+    p("I thank the faculty members of the department for their reviews during the "
       "internal presentations, and our classmates who volunteered as test users "
       "and typed questions we would never have thought of ourselves - many of "
       "which exposed real weaknesses in the matching engine.")
-    p("Finally, we thank our families for their patience during the many evenings "
+    p("Finally, I thank my family for their patience during the many evenings "
       "this project consumed.")
     gap(30)
     story.append(Paragraph(
-        "[STUDENT NAME 1]<br/>[STUDENT NAME 2]<br/>[STUDENT NAME 3]<br/>[STUDENT NAME 4]",
+        NAME,
         ParagraphStyle("sign", parent=S_BODY, alignment=2)))
 
 
