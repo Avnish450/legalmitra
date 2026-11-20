@@ -1,0 +1,7 @@
+.git
+legalmitra.db
+docs/
+run.bat
+requirements-dev.txt
+__pycache__/
+*.pyc

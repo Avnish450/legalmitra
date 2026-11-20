@@ -43,7 +43,7 @@ DB_FILE = _db_path()
 
 def get_connection():
     """Open a connection that returns rows we can access by column name."""
-    connection = sqlite3.connect(DB_FILE)
+    connection = sqlite3.connect(_db_path())
     connection.row_factory = sqlite3.Row
     return connection
 
